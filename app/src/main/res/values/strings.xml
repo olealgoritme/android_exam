@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">iSailing</string>
+    <string name="text_place_name">Place name</string>
+    <string name="list_place_map_icon">Place Map icon</string>
+</resources>
