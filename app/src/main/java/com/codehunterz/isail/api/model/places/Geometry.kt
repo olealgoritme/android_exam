@@ -1,9 +1,10 @@
-package com.codehunterz.isailing.model
+package com.codehunterz.isailing.api.model.places
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.builder.ToStringBuilder
 
+// Geometry of a distinct Place
 class Geometry {
     @SerializedName("type")
     @Expose
