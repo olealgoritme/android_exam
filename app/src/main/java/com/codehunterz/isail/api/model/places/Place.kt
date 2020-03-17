@@ -1,4 +1,4 @@
-package com.codehunterz.isailing.api.model.places
+package com.codehunterz.isail.api.model.places
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

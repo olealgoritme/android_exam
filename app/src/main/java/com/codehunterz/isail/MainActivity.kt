@@ -1,24 +1,25 @@
-package com.codehunterz.isailing
+package com.codehunterz.isail
 
-import android.R
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.codehunterz.isailing.api.APIClient
-import com.codehunterz.isailing.api.APIService
-import com.codehunterz.isailing.api.model.places.Places
+import com.codehunterz.isail.api.APIClient
+import com.codehunterz.isail.api.APIService
+import com.codehunterz.isail.api.AsyncRequest
+import com.codehunterz.isail.api.listener.OnPlacesListener
+import com.codehunterz.isail.api.model.places.Places
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainActivity : AppCompatActivity(), OnPlacesListener {
+class MainActivity : AppCompatActivity(),
+    OnPlacesListener {
 
-    private var recyclerView: RecyclerView? = null;
+    private var recyclerView: RecyclerView? = null
     private var placesAdapter: PlacesAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,10 +29,12 @@ class MainActivity : AppCompatActivity(), OnPlacesListener {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView?.layoutManager = LinearLayoutManager(this)
 
-        getPlaces(this)
+        val asyncReq = AsyncRequest()
+        asyncReq.setListener(this)
+        asyncReq.execute();
     }
 
-    private fun getPlaces(placesListener : OnPlacesListener ) {
+    private fun getPlaces(placesListener : OnPlacesListener) {
         val apiClient = APIClient.getIt
         val service = apiClient?.create(APIService::class.java)
         val call = service?.getAllPlaces()
@@ -40,11 +43,10 @@ class MainActivity : AppCompatActivity(), OnPlacesListener {
 
             override fun onFailure(call: Call<Places>, t: Throwable) {
                 placesListener.onPlacesError();
-                Log.e("Main", "Error: " + t.message)
+                Log.e("Main", "ERRR: " + t.message)
             }
 
             override fun onResponse(call: Call<Places>, response: Response<Places>) {
-
                 if(response.isSuccessful)
                     response.body()?.let { placesListener.onPlaces(it) }
                 else
@@ -56,7 +58,10 @@ class MainActivity : AppCompatActivity(), OnPlacesListener {
 
     override fun onPlaces(places : Places){
         placesAdapter = places.placeList?.let { PlacesAdapter(it) }
-        recyclerView?.adapter = placesAdapter
+
+        runOnUiThread {
+            recyclerView?.adapter = placesAdapter
+        }
     }
 
     override fun onPlacesError() {

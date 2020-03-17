@@ -1,4 +1,4 @@
-package com.codehunterz.isailing
+package com.codehunterz.isail
 
 import org.junit.Test
 
