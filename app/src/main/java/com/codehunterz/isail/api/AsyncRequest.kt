@@ -21,13 +21,7 @@ class AsyncRequest
         val service = apiClient?.create(APIService::class.java)!!
         val call = service.getAllPlaces()
 
-        /*
-        val response = call.execute();
-        if(response.isSuccessful)
-            response.body()?.let { placesListener?.onPlaces(it) }
-        else
-            placesListener?.onPlacesError()
-         */
+        // val response = call.execute(); if(response.isSuccessful) response.body()?.let { placesListener?.onPlaces(it) } else placesListener?.onPlacesError()
 
         call.enqueue(object : Callback<Places> {
 

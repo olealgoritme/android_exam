@@ -61,3 +61,9 @@ Individual:
 77   x nfl_transport
 71   x nfl_hurricaneHole
 57   x nfl_natureReserve
+
+
+## Map Icon Set ##
+Url: https://github.com/mapbox/maki
+Att: Converted to Vector Drawable for Android usage
+

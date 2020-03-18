@@ -45,12 +45,12 @@ class PlacesAdapter (private var list: List<Place>)
                         }
                     }
                 val filterResults = FilterResults()
-                filterResults.values = filterResults
+                filterResults.values = filteredList
                 return filterResults
             }
 
             override fun publishResults(c: CharSequence, res: FilterResults) {
-                list = (res.values as List<Place>?)!!
+                list = res.values as List<Place>
                 notifyDataSetChanged()
             }
         }

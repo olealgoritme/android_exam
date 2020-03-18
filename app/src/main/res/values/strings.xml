@@ -5,8 +5,10 @@
     <string name="action_search">Search here..</string>
     <string name="mapbox_access_token">pk.eyJ1Ijoib2xlYWxnbyIsImEiOiJjazd3MDY5bnQwaGtqM21wNTU2MXEyNGRnIn0.q_IhrfBKVCJJkTixWe4mtg</string>
     <string name="mapbox_secret_token">sk.eyJ1Ijoib2xlYWxnbyIsImEiOiJjazd3MGJxeXAwN3cyM2ZubnIzdGNydjk0In0.EAE1V9i8TMVaSI8AqjLVlg</string>
-    <string name="google_maps_key">AIzaSyDkgSNIi1ZHOq0JoKJwqt_q0d3aXHt8fyI</string>
+    <string name="google_maps_key">AIzaSyDkgSNIi1ZHOq0JoKJwqt_q0d3aXHt8fyI</string> <!-- olealgo key -->
+    <!-- AIzaSyAV6VqAwZzUAlCbkhqAQSiqddbju5PpJ0w key found at noforeignland.com -->
     <string name="default_info_title">Default</string>
     <string name="default_info_snippet">Default info</string>
     <string name="pick_place">Pick a place</string>
 </resources>
+
