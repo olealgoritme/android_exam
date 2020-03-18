@@ -1,10 +1,11 @@
-package com.codehunterz.isail
+package com.codehunterz.isail.api.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.codehunterz.isail.R
 import com.codehunterz.isail.api.model.places.Place
 
 class PlacesViewHolder (inflater: LayoutInflater, parent: ViewGroup)
@@ -14,12 +15,10 @@ class PlacesViewHolder (inflater: LayoutInflater, parent: ViewGroup)
 
     init {
         mPlaceName = itemView.findViewById(R.id.list_place_name)
-        mMapIcon = itemView.findViewById(R.id.list_map_icon)
     }
 
     fun bind(place: Place) {
         mPlaceName?.text = place.getProperties()?.name
-        //mMapIcon?.setImageResource()
     }
 
 }

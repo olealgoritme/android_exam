@@ -1,4 +1,4 @@
-package com.codehunterz.isail
+package com.codehunterz.isail.api.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
