@@ -1,11 +1,12 @@
-package com.codehunterz.isail.api.model.places
+package com.codehunterz.isail.model.places
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 // Place object with it's attributes
 // API returns a JSON array with Place objects and attributes
-class Place {
+class Place : Serializable {
     @SerializedName("type")
     @Expose
     var type: String? = null
@@ -16,7 +17,7 @@ class Place {
 
     @SerializedName("geometry")
     @Expose
-    var placeGeometry: Geometry? = null
+    var geometry: Geometry? = null
 
     fun getProperties(): Property? {
         return properties

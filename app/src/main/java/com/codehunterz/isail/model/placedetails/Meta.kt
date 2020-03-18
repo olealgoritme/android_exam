@@ -1,4 +1,4 @@
-package com.codehunterz.isail.api.model.placedetails
+package com.codehunterz.isail.model.placedetails
 
 import org.apache.commons.lang3.builder.ToStringBuilder
 

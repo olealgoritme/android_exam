@@ -1,23 +1,22 @@
-package com.codehunterz.isail
+package com.codehunterz.isail.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.codehunterz.isail.api.APIClient
-import com.codehunterz.isail.api.APIService
+import com.codehunterz.isail.R
 import com.codehunterz.isail.api.AsyncRequest
-import com.codehunterz.isail.api.listener.OnPlacesListener
-import com.codehunterz.isail.api.model.places.Places
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.codehunterz.isail.listener.OnPlacesRequestListener
+import com.codehunterz.isail.model.places.Places
+import com.codehunterz.isail.view.PlacesAdapter
+import com.google.android.material.snackbar.Snackbar
 
 
-class MainActivity : AppCompatActivity(),
-    OnPlacesListener {
+class MainActivity
+    : AppCompatActivity(), OnPlacesRequestListener {
 
     private var recyclerView: RecyclerView? = null
     private var placesAdapter: PlacesAdapter? = null
@@ -27,45 +26,54 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.recyclerView)
-        recyclerView?.layoutManager = LinearLayoutManager(this)
 
+        // Send async get request to provider API
         val asyncReq = AsyncRequest()
         asyncReq.setListener(this)
         asyncReq.execute();
+
+        // Check permissions
     }
 
-    private fun getPlaces(placesListener : OnPlacesListener) {
-        val apiClient = APIClient.getIt
-        val service = apiClient?.create(APIService::class.java)
-        val call = service?.getAllPlaces()
-
-        call?.enqueue(object : Callback<Places> {
-
-            override fun onFailure(call: Call<Places>, t: Throwable) {
-                placesListener.onPlacesError();
-                Log.e("Main", "ERRR: " + t.message)
-            }
-
-            override fun onResponse(call: Call<Places>, response: Response<Places>) {
-                if(response.isSuccessful)
-                    response.body()?.let { placesListener.onPlaces(it) }
-                else
-                    placesListener.onPlacesError()
-                    Log.e("Main", "Error! Response: " + response.body())
-            }
-        });
-    }
-
-    override fun onPlaces(places : Places){
-        placesAdapter = places.placeList?.let { PlacesAdapter(it) }
-
+    override fun onPlacesRequestSuccess(places : Places) {
+        placesAdapter = places.placeList?.let {
+            PlacesAdapter(it)
+        }
         runOnUiThread {
             recyclerView?.adapter = placesAdapter
+            recyclerView?.layoutManager = LinearLayoutManager(this)
+        }
+        placesAdapter?.itemClick = { place ->
+
+            Log.d(
+                TAG,
+                "MAP Got place: " + place.getProperties()?.name +
+                        " | ID: " + place.getProperties()?.id +
+                        " | LatLng: " + place.geometry?.coordinates?.get(0)
+                        + "," + place.geometry?.coordinates?.get(1)
+            );
+
+            val intent = Intent(this@MainActivity, MapActivity::class.java)
+            intent.putExtra(KEY_SELECTED_PLACE, place)
+            startActivity(intent)
         }
     }
 
-    override fun onPlacesError() {
+    override fun onPlacesRequestError() {
         Toast.makeText(this@MainActivity, "Got ERROR ", Toast.LENGTH_LONG).show()
+    }
+
+    private fun showSnackMsg(msg : String) {
+        val snackBar = Snackbar.make(currentFocus!!, msg, Snackbar.LENGTH_INDEFINITE)
+            .setAction("OK") {
+            }
+        snackBar.show()
+    }
+
+
+    companion object {
+        private val TAG = MainActivity::class.java.simpleName
+        const val KEY_SELECTED_PLACE: String = "SELECTED_PLACE"
     }
 
 }

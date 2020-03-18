@@ -1,10 +1,11 @@
-package com.codehunterz.isail.api.model.places
+package com.codehunterz.isail.model.places
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 // Properties of a distinct Place
-class Property {
+class Property : Serializable {
     @SerializedName("name")
     @Expose
     var name: String? = null
@@ -15,5 +16,5 @@ class Property {
 
     @SerializedName("id")
     @Expose
-    var id: Float? = null
+    var id: String? = null
 }

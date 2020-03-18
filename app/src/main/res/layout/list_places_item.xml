@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_gravity="center_horizontal"
-    android:padding="16dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="horizontal"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/list_place_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:paddingStart="16dp"
         android:text="@string/text_place_name"
+        android:gravity="start"
+        android:layout_weight="0.5"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textStyle="bold"
-        android:paddingEnd="16dp" />
+        android:textSize="18sp"/>
 
     <ImageView
         android:id="@+id/list_map_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:contentDescription="@string/list_place_map_icon" />
+        android:gravity="end"
+        android:layout_weight="0.5"
+        android:contentDescription="@string/list_place_map_icon"
+        android:src="@mipmap/ic_map" />
 
 </LinearLayout>

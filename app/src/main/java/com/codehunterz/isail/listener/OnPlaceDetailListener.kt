@@ -1,6 +1,6 @@
-package com.codehunterz.isail.api.listener
+package com.codehunterz.isail.listener
 
-import com.codehunterz.isail.api.model.placedetails.PlaceDetails
+import com.codehunterz.isail.model.placedetails.PlaceDetails
 
 interface OnPlaceDetailListener {
     fun onPlaceDetails(placeDetail : PlaceDetails)

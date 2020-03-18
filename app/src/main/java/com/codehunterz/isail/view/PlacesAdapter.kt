@@ -1,16 +1,25 @@
-package com.codehunterz.isail.api.view
+package com.codehunterz.isail.view
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.codehunterz.isail.api.model.places.Place
+import com.codehunterz.isail.R
+import com.codehunterz.isail.model.places.Place
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PlacesAdapter(private var list: List<Place>)
-    : RecyclerView.Adapter<PlacesViewHolder>(), Filterable {
+class PlacesAdapter (private var list: List<Place>)
+    : RecyclerView.Adapter<PlacesAdapter.PlacesViewHolder>(), Filterable {
+
+
+    // For passing on clicked place object
+    var itemClick: ((Place) -> Unit)? = null
+    private var places: List<Place> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlacesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -45,6 +54,29 @@ class PlacesAdapter(private var list: List<Place>)
                 notifyDataSetChanged()
             }
         }
+    }
+
+    inner class PlacesViewHolder (inflater: LayoutInflater, parent: ViewGroup)
+        :RecyclerView.ViewHolder(inflater.inflate(R.layout.list_places_item, parent, false)) {
+        private var mPlaceName: TextView? = null
+        private var mIcon: ImageView? = null
+
+
+        init {
+            mPlaceName = itemView.findViewById(R.id.list_place_name)
+            mIcon = itemView.findViewById(R.id.list_map_icon)
+
+            // Click listener
+            itemView.setOnClickListener {
+                itemClick?.invoke(list[adapterPosition])
+            }
+        }
+
+        fun bind(place: Place) {
+            mPlaceName?.text = place.getProperties()?.name
+
+        }
+
     }
 
 }

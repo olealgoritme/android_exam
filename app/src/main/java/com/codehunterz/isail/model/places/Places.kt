@@ -1,10 +1,11 @@
-package com.codehunterz.isail.api.model.places
+package com.codehunterz.isail.model.places
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 // JSON Response entry point
-class Places {
+class Places : Serializable {
     @SerializedName("type")
     @Expose
     var type: String? = null;

@@ -1,6 +1,6 @@
-package com.codehunterz.isail.api.listener
+package com.codehunterz.isail.listener
 
-import com.codehunterz.isail.api.model.places.Places
+import com.codehunterz.isail.model.places.Places
 
 interface OnPlacesRequestListener {
     fun onPlacesRequestSuccess(places : Places)
