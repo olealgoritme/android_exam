@@ -4,12 +4,13 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class Meta : Serializable {
-    @SerializedName("id")
+class Snapshot : Serializable {
+    @SerializedName("time")
     @Expose
-    var id: String? = null
+    var time: String? = null
 
-    @SerializedName("type")
+    @SerializedName("reason")
     @Expose
-    var type: String? = null
+    var reason: String? = null
+
 }

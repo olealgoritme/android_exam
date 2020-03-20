@@ -1,7 +1,7 @@
 package com.codehunterz.isail.view
 
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -9,17 +9,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codehunterz.isail.R
+import com.codehunterz.isail.listener.OnPlaceClickListener
 import com.codehunterz.isail.model.places.Place
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PlacesAdapter (private var list: List<Place>)
+class PlacesAdapter (private var list: List<Place>, private var listener : OnPlaceClickListener)
     : RecyclerView.Adapter<PlacesAdapter.PlacesViewHolder>(), Filterable {
 
 
     // For passing on clicked place object
-    var itemClick: ((Place) -> Unit)? = null
-    private var places: List<Place> = emptyList()
+    var onIconClick: ((Place) -> Unit)? = null
+    var onNameClick: ((String) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlacesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -58,25 +59,31 @@ class PlacesAdapter (private var list: List<Place>)
 
     inner class PlacesViewHolder (inflater: LayoutInflater, parent: ViewGroup)
         :RecyclerView.ViewHolder(inflater.inflate(R.layout.list_places_item, parent, false)) {
-        private var mPlaceName: TextView? = null
-        private var mIcon: ImageView? = null
-
+        private var textPlace: TextView? = null
 
         init {
-            mPlaceName = itemView.findViewById(R.id.list_place_name)
-            mIcon = itemView.findViewById(R.id.list_map_icon)
+            val mPlaceName: TextView? = itemView.findViewById(R.id.list_place_name)
+            val mIcon: ImageView? = itemView.findViewById(R.id.list_map_icon)
+            textPlace = mPlaceName
 
-            // Click listener
-            itemView.setOnClickListener {
-                itemClick?.invoke(list[adapterPosition])
+            // Place Name click Listener
+            mPlaceName?.setOnClickListener {
+                listener.onPlaceNameClicked(list[adapterPosition])
+            }
+
+            // Map Icon click listener
+            mIcon?.setOnClickListener {
+                listener.onPlaceMapIconClicked(list[adapterPosition])
             }
         }
 
         fun bind(place: Place) {
-            mPlaceName?.text = place.getProperties()?.name
-
+            textPlace?.text = place.getProperties()?.name
         }
+    }
 
+    companion object {
+        private val TAG = PlacesAdapter::class.java.simpleName
     }
 
 }
