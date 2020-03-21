@@ -5,16 +5,14 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 // Properties of a distinct Place
-class Property : Serializable {
+class Property(
+    @SerializedName("id")
+    @Expose var id: String?,
+
     @SerializedName("name")
-    @Expose
-    var name: String? = null
+    @Expose var name: String?,
 
     @SerializedName("icon")
-    @Expose
-    var icon: String? = null
+    @Expose var icon: String?
+) : Serializable
 
-    @SerializedName("id")
-    @Expose
-    var id: String? = null
-}

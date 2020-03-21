@@ -6,10 +6,6 @@ import java.io.Serializable
 
 // JSON Response entry point
 class PlacesEntry : Serializable {
-    @SerializedName("type")
-    @Expose
-    var type: String? = null;
-
     @SerializedName("features")
     @Expose
     var placeList: List<Place>? = null

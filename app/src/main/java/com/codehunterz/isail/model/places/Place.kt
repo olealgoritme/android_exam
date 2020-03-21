@@ -6,18 +6,12 @@ import java.io.Serializable
 
 // Place object with it's attributes
 // API returns a JSON array with Place objects and attributes
-class Place : Serializable {
-    @SerializedName("type")
-    @Expose
-    var type: String? = null
-
+class Place(
     @SerializedName("properties")
     @Expose
-    private var properties: Property? = null
-
-    @SerializedName("geometry")
-    @Expose
-    var geometry: Geometry? = null
+    private var properties: Property?, @SerializedName("geometry")
+    @Expose var geometry: Geometry?
+) : Serializable {
 
     fun getProperties(): Property? {
         return properties
@@ -28,3 +22,4 @@ class Place : Serializable {
     }
 
 }
+

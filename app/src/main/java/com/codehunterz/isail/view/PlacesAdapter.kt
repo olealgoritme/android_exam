@@ -1,6 +1,5 @@
 package com.codehunterz.isail.view
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -40,7 +39,7 @@ class PlacesAdapter (private var list: List<Place>, private var listener : OnPla
                 val charString = charSequence.toString()
                 val filteredList: MutableList<Place> = ArrayList()
                     for (row in list) {
-                        if (row.getProperties()!!.name!!.toLowerCase(Locale.getDefault())
+                        if (row.getProperties()?.name!!.toLowerCase(Locale.getDefault())
                                 .contains(charString.toLowerCase(Locale.getDefault()))) {
                             filteredList.add(row)
                         }

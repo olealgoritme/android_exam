@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 // Geometry of a distinct Place
-class Geometry : Serializable {
+class Geometry(lat: Double, lng: Double) : Serializable {
     @SerializedName("type")
     @Expose
     var type: String? = null
@@ -13,4 +13,8 @@ class Geometry : Serializable {
     @SerializedName("coordinates")
     @Expose
     var coordinates: List<Double>? = null
+
+    init {
+        this.coordinates = listOf(lat, lng)
+    }
 }
