@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.codehunterz.isail.R
 import com.codehunterz.isail.model.IconDetails
+import com.codehunterz.isail.model.placedetails.PlaceDetails
 import com.codehunterz.isail.model.places.Place
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,6 +30,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // Received Place object from different Activity through intent
     private var mPlace: Place? = null
+    private var mPlaceDetails: PlaceDetails? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,15 +40,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Get Place object from intent
         mPlace = intent.getSerializableExtra(MainActivity.KEY_SELECTED_PLACE) as? Place
+        mPlaceDetails = intent.getSerializableExtra(MainActivity.KEY_SELECTED_PLACE_DETAILS) as? PlaceDetails
+
         setContentView(R.layout.activity_maps)
 
-        // Construct a PlacesClient
         Places.initialize(applicationContext, getString(R.string.google_maps_key))
         mPlacesClient = Places.createClient(this)
 
-        // Build the map.
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment?
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
     }
 
@@ -58,7 +59,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     override fun onMapReady(map: GoogleMap) {
         mMap = map;
         mMap!!.setMaxZoomPreference(DEFAULT_ZOOM.toFloat())
@@ -66,18 +66,47 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         // Prompt the user for permission.
         getLocationPermission()
 
+        if(mPlace != null)
+            setMapPlacesInfo()
+
+        if(mPlaceDetails != null)
+            setMapPlaceDetailsInfo()
+    }
+
+    private fun animateCamera(location: LatLng, mMap : GoogleMap) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        mMap.setOnMapLoadedCallback {
+            mMap.animateCamera(CameraUpdateFactory.zoomOut(), 1000, null)
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(5.0f), 1500, null)
+        }
+    }
+
+    private fun setMapPlaceDetailsInfo() {
+        if(mPlaceDetails != null) {
+            val location = LatLng(mPlaceDetails!!.lat!!, mPlaceDetails!!.lon!!)
+
+            val markerOptions =
+                MarkerOptions()
+                    .title(mPlaceDetails!!.name)
+                    .snippet(mPlaceDetails!!.name + "\n" +
+                            "Latitude: " + mPlaceDetails!!.lat +
+                            "Longitude: " + mPlaceDetails!!.lon)
+
+            val marker= mMap?.addMarker(markerOptions)
+            marker?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+            animateCamera(location!!, mMap!!);
+            marker?.showInfoWindow()
+        }
+    }
+
+    private fun setMapPlacesInfo() {
         if(mPlace != null) {
             val location: LatLng? = mPlace!!.geometry?.coordinates?.get(1)?.let { mPlace!!.geometry?.coordinates?.get(0)?.let { it1 -> LatLng(it1, it) } }
             val markerOptions = location?.let { MarkerOptions().title(mPlace!!.getProperties()?.name).position(it)}?.snippet(mPlace!!.getProperties()?.icon?.let { IconDetails.getDetails(it)})
             val marker= mMap?.addMarker(markerOptions)
             marker?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-            mMap?.moveCamera(CameraUpdateFactory.newLatLng(location))
-            mMap?.setOnMapLoadedCallback {
-                mMap?.animateCamera(CameraUpdateFactory.zoomOut(), 1000, null)
-                mMap?.animateCamera(CameraUpdateFactory.zoomTo(5.0f), 1500, null)
-            }
+            animateCamera(location!!, mMap!!);
             marker?.showInfoWindow()
-            Log.d(TAG, "Location object: " + location.toString())
         }
     }
 

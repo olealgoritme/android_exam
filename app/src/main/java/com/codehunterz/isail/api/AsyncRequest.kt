@@ -21,6 +21,7 @@ class AsyncRequest
         this.shouldGetAll = shouldGetAll
         this.placeId = placeId
     }
+
     fun setListener(apiRequestListener: OnAPIRequestListener) {
         this.apiRequestListener = apiRequestListener
     }

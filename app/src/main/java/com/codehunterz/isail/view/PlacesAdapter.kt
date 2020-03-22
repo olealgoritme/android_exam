@@ -16,11 +16,6 @@ import kotlin.collections.ArrayList
 class PlacesAdapter (private var list: List<Place>, private var listener : OnPlaceClickListener)
     : RecyclerView.Adapter<PlacesAdapter.PlacesViewHolder>(), Filterable {
 
-
-    // For passing on clicked place object
-    var onIconClick: ((Place) -> Unit)? = null
-    var onNameClick: ((String) -> Unit)? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlacesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return PlacesViewHolder(inflater, parent)
