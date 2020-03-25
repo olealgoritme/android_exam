@@ -13,8 +13,11 @@ import com.codehunterz.isail.model.places.Place
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PlacesAdapter (private var list: List<Place>, private var listener : OnPlaceClickListener)
+@Suppress("UNCHECKED_CAST")
+class PlacesAdapter (private var list: MutableList<Place>, private var listener : OnPlaceClickListener)
     : RecyclerView.Adapter<PlacesAdapter.PlacesViewHolder>(), Filterable {
+
+    private var placeList = list;
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlacesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,26 +29,41 @@ class PlacesAdapter (private var list: List<Place>, private var listener : OnPla
         holder.bind(place)
     }
 
+    fun resetList() {
+        list = placeList;
+    }
+
     override fun getItemCount(): Int = list.size
 
     override fun getFilter(): Filter {
+
         return object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): FilterResults {
-                val charString = charSequence.toString()
+
+            override fun performFiltering(chars: CharSequence): FilterResults {
+
                 val filteredList: MutableList<Place> = ArrayList()
-                    for (row in list) {
-                        if (row.getProperties()?.name!!.toLowerCase(Locale.getDefault())
-                                .contains(charString.toLowerCase(Locale.getDefault()))) {
-                            filteredList.add(row)
+                val filterResults = FilterResults()
+                val filterPattern = chars.toString().toLowerCase(Locale.getDefault()).trim();
+
+                if(chars.isEmpty()) {
+                    filteredList.addAll(placeList)
+                } else {
+                    for (place in list) {
+                        val placeName = place.getProperties()!!.name!!.toLowerCase(Locale.getDefault()).trim()
+                        if (placeName.contains(filterPattern)) {
+                            filteredList.add(place)
                         }
                     }
-                val filterResults = FilterResults()
+                }
                 filterResults.values = filteredList
                 return filterResults
             }
 
-            override fun publishResults(c: CharSequence, res: FilterResults) {
-                list = res.values as List<Place>
+            override fun publishResults(c: CharSequence, result: FilterResults) {
+                val newList: MutableList<Place> = result.values as MutableList<Place>
+                list = newList
+                //list.clear()
+                //list.addAll(newList)
                 notifyDataSetChanged()
             }
         }
@@ -53,31 +71,26 @@ class PlacesAdapter (private var list: List<Place>, private var listener : OnPla
 
     inner class PlacesViewHolder (inflater: LayoutInflater, parent: ViewGroup)
         :RecyclerView.ViewHolder(inflater.inflate(R.layout.list_places_item, parent, false)) {
-        private var textPlace: TextView? = null
+        private var textPlace: TextView
 
         init {
-            val mPlaceName: TextView? = itemView.findViewById(R.id.list_place_name)
-            val mIcon: ImageView? = itemView.findViewById(R.id.list_map_icon)
+            val mPlaceName: TextView = itemView.findViewById(R.id.list_place_name)
+            val mIcon: ImageView = itemView.findViewById(R.id.list_map_icon)
             textPlace = mPlaceName
 
             // Place Name click Listener
-            mPlaceName?.setOnClickListener {
+            mPlaceName.setOnClickListener {
                 listener.onPlaceNameClicked(list[adapterPosition])
             }
 
             // Map Icon click listener
-            mIcon?.setOnClickListener {
+            mIcon.setOnClickListener {
                 listener.onPlaceMapIconClicked(list[adapterPosition])
             }
         }
 
         fun bind(place: Place) {
-            textPlace?.text = place.getProperties()?.name
+            textPlace.text = place.getProperties()?.name
         }
     }
-
-    companion object {
-        private val TAG = PlacesAdapter::class.java.simpleName
-    }
-
 }

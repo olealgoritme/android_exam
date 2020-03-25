@@ -3,9 +3,14 @@ package com.codehunterz.isail.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codehunterz.isail.R
@@ -23,10 +28,13 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity
     : AppCompatActivity(), OnAPIRequestListener, OnPlaceClickListener {
 
-    private var recyclerView: RecyclerView? = null
-    private var placesAdapter: PlacesAdapter? = null
-    private var asyncReq: AsyncRequest? = null
-    private var progressBar: ProgressBar? = null
+    // Views etc
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var placesAdapter: PlacesAdapter
+    private lateinit var asyncReq: AsyncRequest
+    private lateinit var progressBar: ProgressBar
+    private lateinit var searchView: SearchView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +50,34 @@ class MainActivity
         fetchPlaces()
     }
 
+    override fun onBackPressed() {
+        if (!searchView.isIconified) {
+            searchView.onActionViewCollapsed();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_search_bar, menu)
+        val searchItem = menu.findItem(R.id.actionSearch)
+        searchView = searchItem.actionView as SearchView
+        searchView.setOnCloseListener { true }
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                placesAdapter.filter.filter(query)
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                placesAdapter.filter.filter(newText)
+                return false
+            }
+        })
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onAPIPlacesReqSuccess(placesEntry : PlacesEntry) {
-        progressBar?.visibility = View.GONE
+        progressBar.visibility = View.GONE
 
         placesEntry.placeList?.let {
             populateRecyclerView(it) // list -> PlacesAdapter -> RecyclerView
@@ -60,7 +94,7 @@ class MainActivity
 
 
     override fun onAPIPlacesReqError() {
-        progressBar?.visibility = View.GONE
+        progressBar.visibility = View.GONE
         showSnackMsg("ERROR when Requesting All Places from API. Please contact developer")
     }
 
@@ -99,9 +133,9 @@ class MainActivity
                 Log.d(TAG, "Place List from DB was empty -- GETTING PLACES FROM API ")
                 // Send async get request to provider API (get ALL places)
                 asyncReq = AsyncRequest()
-                asyncReq!!.setParams(true);
-                asyncReq!!.setListener(this)
-                asyncReq!!.execute();
+                asyncReq.setParams(true);
+                asyncReq.setListener(this)
+                asyncReq.execute();
             } else {
                 Log.d(TAG, "Place List from DB FULL -- GETTING PLACES FROM DB")
                 // Send List -> PlacesAdapter -> RecyclerView
@@ -115,9 +149,9 @@ class MainActivity
     private fun fetchPlaceDetails(placeId : String) {
         // Send async get request to prover API (get place details)
         asyncReq = AsyncRequest()
-        asyncReq!!.setParams(false, placeId);
-        asyncReq!!.setListener(this)
-        asyncReq!!.execute();
+        asyncReq.setParams(false, placeId);
+        asyncReq.setListener(this)
+        asyncReq.execute();
 
     }
 
@@ -129,12 +163,12 @@ class MainActivity
         }).run()
     }
 
-    private fun populateRecyclerView(placesList : List<Place>) {
+    private fun populateRecyclerView(placesList : MutableList<Place>) {
         // Set PlacesAdapter in RecyclerView (fire and forget Thread)
         Thread(Runnable {
             placesAdapter = PlacesAdapter(placesList, this@MainActivity)
-            recyclerView?.adapter = placesAdapter
-            recyclerView?.layoutManager = LinearLayoutManager(this@MainActivity)
+            recyclerView.adapter = placesAdapter
+            recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         }).run()
     }
 

@@ -13,5 +13,6 @@
     <string name="details_image_map_icon">image map icon</string>
     <string name="details_text_description">Description</string>
     <string name="details_content_image_banner">content image banner</string>
+    <string name="menu_search_text">Search</string>
 </resources>
 

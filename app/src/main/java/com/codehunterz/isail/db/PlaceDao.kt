@@ -82,7 +82,7 @@ class PlaceDao(private var ctx: Context) {
 
     }
 
-    fun fetchAll(): List<Place> {
+    fun fetchAll(): MutableList<Place> {
 
         val cursor: Cursor = db!!.readableDatabase.query(PLACE_TABLE_NAME, null, null, null, null, null, null)
         val placeList = mutableListOf<Place>()

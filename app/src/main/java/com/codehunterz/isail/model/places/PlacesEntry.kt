@@ -8,5 +8,5 @@ import java.io.Serializable
 class PlacesEntry : Serializable {
     @SerializedName("features")
     @Expose
-    var placeList: List<Place>? = null
+    var placeList: MutableList<Place>? = null
 }
