@@ -1,12 +1,14 @@
 package com.codehunterz.isail.model.places
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
+import kotlinx.android.parcel.Parcelize
 
-// JSON Response entry point
-class PlacesEntry : Serializable {
+// JSON Object Response entry point for API endpoint "/places"
+@Parcelize
+class PlacesEntry(
     @SerializedName("features")
-    @Expose
-    var placeList: MutableList<Place>? = null
-}
+    @Expose var placeList: MutableList<Place>
+) : Parcelable
+

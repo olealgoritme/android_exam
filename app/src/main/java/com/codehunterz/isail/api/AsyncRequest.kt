@@ -14,10 +14,10 @@ class AsyncRequest
     : AsyncTask<Void, String, Void> () {
 
     private var apiRequestListener: OnAPIRequestListener? = null
-    private var shouldGetAll: Boolean? = false
-    private var placeId: String? = null
+    private var shouldGetAll: Boolean? = null
+    private var placeId: Long? = null
 
-    fun setParams(shouldGetAll: Boolean, placeId: String? = null) {
+    fun setParams(shouldGetAll: Boolean, placeId: Long? = null) {
         this.shouldGetAll = shouldGetAll
         this.placeId = placeId
     }
@@ -28,51 +28,61 @@ class AsyncRequest
 
     override fun doInBackground(vararg params: Void?): Void? {
 
-        if(!shouldGetAll!! && placeId!!.isEmpty())
-            throw Exception("need to call .setParams() first");
+        // Sanity check
+        preInitCheck();
 
+        // Get API client / Service reference
         val apiClient = APIClient.getIt
         val service = apiClient?.create(APIService::class.java)!!
 
-        // Switch between getAllPlaces() and getPlaceDetails()
+        // Switching between getting ALL Places and just Place details
         if(shouldGetAll as Boolean) {
-            Log.d("AsyncRequest", "Getting ALL places");
-            val call = service.getAllPlaces()
-            call.enqueue(object : Callback<PlacesEntry> {
-                override fun onFailure(call: Call<PlacesEntry>, t: Throwable) {
-                    apiRequestListener?.onAPIPlacesReqError();
-                    Log.e("Async", "Throw: $t")
-                }
-                override fun onResponse(call: Call<PlacesEntry>, response: Response<PlacesEntry>) {
-                    if(response.isSuccessful) response.body()?.let {
-                        apiRequestListener?.onAPIPlacesReqSuccess(it)
-                    }
-                    else apiRequestListener?.onAPIPlacesReqError()
-                    Log.e("Async", "response: $response")
-                }
-            });
+            getAllPlaces(service)
         } else {
-            Log.d("AsyncRequest", "Getting PLACE DETAILS: " + placeId!!);
-            val call = service.getPlaceDetails(placeId!!)
-            call.enqueue(object : Callback<PlaceDetailsEntry> {
-                override fun onFailure(call: Call<PlaceDetailsEntry>, t: Throwable) {
-                    apiRequestListener?.onAPIDetailsReqError();
-                    Log.e("Async", "Throw: $t")
-                }
-                override fun onResponse(call: Call<PlaceDetailsEntry>, response: Response<PlaceDetailsEntry>) {
-                    if(response.isSuccessful) response.body()?.let {
-                        apiRequestListener?.onAPIDetailsReqSuccess(it)
-                    }
-                    else
-                        apiRequestListener?.onAPIDetailsReqError()
-                    Log.e("Async", "response: $response")
-                }
-            });
-
+            if(placeId == null) throw Exception("Missing Place ID!")
+            getPlaceDetails(service, placeId!!)
         }
         return null;
     }
 
     override fun onPostExecute(result: Void?) {
+       // Empty stub. Not updating UI here
     }
+
+    private fun getAllPlaces(service : APIService) {
+        Log.d("AsyncRequest", "Getting ALL places");
+        val call = service.getAllPlaces()
+
+        call.enqueue(object : Callback<PlacesEntry> {
+
+            override fun onFailure(call: Call<PlacesEntry>, t: Throwable) { apiRequestListener?.onAPIPlacesReqError(); }
+
+            override fun onResponse(call: Call<PlacesEntry>, response: Response<PlacesEntry>) {
+                if(response.isSuccessful) response.body()?.let { apiRequestListener?.onAPIPlacesReqSuccess(it.placeList) }
+                else apiRequestListener?.onAPIPlacesReqError()
+            }
+        });
+    }
+
+    private fun getPlaceDetails(service : APIService, placeId : Long) {
+
+        Log.d("AsyncRequest", "Getting PLACE DETAILS: $placeId");
+        val call:Call<PlaceDetailsEntry> = service.getPlaceDetails(placeId)
+
+        call.enqueue(object : Callback<PlaceDetailsEntry> {
+
+            override fun onFailure(call: Call<PlaceDetailsEntry>, t: Throwable) { apiRequestListener?.onAPIDetailsReqError(); }
+
+            override fun onResponse(call: Call<PlaceDetailsEntry>, response: Response<PlaceDetailsEntry>) {
+                if(response.isSuccessful) response.body()?.let { apiRequestListener?.onAPIDetailsReqSuccess(it.placeDetails) }
+                else apiRequestListener?.onAPIDetailsReqError()
+            }
+        });
+    }
+
+    private fun preInitCheck() {
+        if (shouldGetAll == null) throw Exception("need to call .setParams() first");
+        if (apiRequestListener == null) throw Exception("need to call .setListener() first")
+    }
+
 }

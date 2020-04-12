@@ -1,7 +1,6 @@
 package com.codehunterz.isail.api
 
 import com.codehunterz.isail.model.placedetails.PlaceDetailsEntry
-import com.codehunterz.isail.model.places.Place
 import com.codehunterz.isail.model.places.PlacesEntry
 import retrofit2.Call
 import retrofit2.http.GET
@@ -12,5 +11,5 @@ interface APIService {
     fun getAllPlaces() : Call<PlacesEntry>
 
     @GET("place")
-    fun getPlaceDetails(@Query("id") format: String) : Call<PlaceDetailsEntry>
+    fun getPlaceDetails(@Query("id") format: Long) : Call<PlaceDetailsEntry>
 }

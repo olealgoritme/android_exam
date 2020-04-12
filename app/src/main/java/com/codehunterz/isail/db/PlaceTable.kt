@@ -25,4 +25,24 @@ object PlaceTable : BaseColumns {
     // Longitude column (REAL)
     const val COLUMN_LNG  = "longitude"
     const val COLUMN_LNG_TYPE = "REAL"
+
+    // CountryCode column (TEXT)
+    const val COLUMN_COUNTRY_CODE = "country_code"
+    const val COLUMN_COUNTRY_CODE_TYPE = "TEXT"
+
+    // Comments column (TEXT)
+    const val COLUMN_COMMENTS = "comments"
+    const val COLUMN_COMMENTS_TYPE = "TEXT"
+
+    // Stars column (REAL)
+    const val COLUMN_STARS = "stars"
+    const val COLUMN_STARS_TYPE = "REAL"
+
+    // Banner column (TEXT)
+    const val COLUMN_BANNER = "banner"
+    const val COLUMN_BANNER_TYPE = "TEXT"
+
+    // Images column (TEXT)
+    const val COLUMN_IMAGES_JSON = "images_json"
+    const val COLUMN__IMAGES_JSON_TYPE = "TEXT"
 }

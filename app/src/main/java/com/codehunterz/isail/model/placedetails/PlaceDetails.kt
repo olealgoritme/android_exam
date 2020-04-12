@@ -1,161 +1,55 @@
 package com.codehunterz.isail.model.placedetails
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
+import kotlinx.android.parcel.Parcelize
 
-class PlaceDetails : Serializable {
+@Parcelize
+class PlaceDetails(
     @SerializedName("id")
-    @Expose
-    var id: String? = null
-
-    @SerializedName("type")
-    @Expose
-    var type: String? = null
+    @Expose var id: Long,
 
     @SerializedName("name")
-    @Expose
-    var name: String? = null
+    @Expose var name: String,
 
     @SerializedName("lat")
-    @Expose
-    var lat: Double? = null
+    @Expose var lat: Double,
 
     @SerializedName("lon")
-    @Expose
-    var lon: Double? = null
+    @Expose var lon: Double,
 
     @SerializedName("countryCode")
-    @Expose
-    var countryCode: String? = null
+    @Expose var countryCode: String,
 
     @SerializedName("comments")
-    @Expose
-    var comments: String? = null
-
-    @SerializedName("meta")
-    @Expose
-    var meta: Meta? = null
-
-    @SerializedName("blogCount")
-    @Expose
-    var blogCount: String? = null
-
-    @SerializedName("externalLink1")
-    @Expose
-    var externalLink1: String? = null
-
-    @SerializedName("externalLinkDescription1")
-    @Expose
-    var externalLinkDescription1: String? = null
-
-    @SerializedName("externalLink2")
-    @Expose
-    var externalLink2: String? = null
-
-    @SerializedName("externalLinkDescription2")
-    @Expose
-    var externalLinkDescription2: String? = null
-
-    @SerializedName("dieselPrice")
-    @Expose
-    var dieselPrice: String? = null
-
-    @SerializedName("dieselPriceUpdatedMs")
-    @Expose
-    var dieselPriceUpdatedMs: String? = null
-
-    @SerializedName("gasolinePrice")
-    @Expose
-    var gasolinePrice: String? = null
-
-    @SerializedName("gasolinePriceUpdatedMs")
-    @Expose
-    var gasolinePriceUpdatedMs: String? = null
-
-    @SerializedName("maxLiftWeightTonnes")
-    @Expose
-    var maxLiftWeightTonnes: String? = null
-
-    @SerializedName("allowsExternalContractors")
-    @Expose
-    var allowsExternalContractors: Boolean? = null
-
-    @SerializedName("canWorkOnOwnBoat")
-    @Expose
-    var canWorkOnOwnBoat: Boolean? = null
-
-    @SerializedName("canStayOnOwnBoat")
-    @Expose
-    var canStayOnOwnBoat: Boolean? = null
-
-    @SerializedName("priceBandHighSeason")
-    @Expose
-    var priceBandHighSeason: String? = null
-
-    @SerializedName("priceBandLowSeason")
-    @Expose
-    var priceBandLowSeason: String? = null
-
-    @SerializedName("winterCommunity")
-    @Expose
-    var winterCommunity: Boolean? = null
-
-    @SerializedName("protectionFrom")
-    @Expose
-    var protectionFrom: String? = null
-
-    @SerializedName("addedMs")
-    @Expose
-    var addedMs: String? = null
-
-    @SerializedName("addedBy")
-    @Expose
-    var addedBy: String? = null
-
-    @SerializedName("addedById")
-    @Expose
-    var addedById: String? = null
-
-    @SerializedName("updatedMs")
-    @Expose
-    var updatedMs: String? = null
-
-    @SerializedName("updatedBy")
-    @Expose
-    var updatedBy: String? = null
-
-    @SerializedName("updatedById")
-    @Expose
-    var updatedById: String? = null
+    @Expose var comments: String,
 
     @SerializedName("col")
-    @Expose
-    var col: String? = null
+    @Expose var color: String,
 
     @SerializedName("icon")
-    @Expose
-    var icon: String? = null
-
-    @SerializedName("mapboxIcon")
-    @Expose
-    var mapboxIcon: String? = null
+    @Expose var icon: String,
 
     @SerializedName("stars")
-    @Expose
-    var stars: String? = null
+    @Expose var stars: Int,
 
     @SerializedName("banner")
-    @Expose
-    var banner: String? = null
+    @Expose var banner: String,
 
     @SerializedName("images")
-    @Expose
-    var images: List<Image>? =
-        null
+    @Expose var images: List<Image>
 
-    @SerializedName("reviews")
-    @Expose
-    var reviews: List<Any>? = null
+) : Parcelable {
 
+    @Parcelize
+    class Image(
+        @SerializedName("servingUrl")
+        @Expose
+        var servingUrl: String,
+
+        @SerializedName("caption")
+        @Expose var caption: String
+    ) : Parcelable
 }
+

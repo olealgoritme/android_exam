@@ -1,9 +1,10 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -11,6 +12,49 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.LayoutBar" parent="@style/Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorPrimary">@color/quantum_white_100</item>
+    </style>
+
+
+    <style name="AppTheme.FullScreen" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+
+    <!-- neumorphism -->
+    <style name="NeumorphView">
+        <item name="neumorph_shadowElevation">6dp</item>
+        <item name="neumorph_shadowColorLight">@color/default_shadow_light</item>
+        <item name="neumorph_shadowColorDark">@color/default_shadow_dark</item>
+    </style>
+
+    <style name="defaultNeumorphCardView" parent="NeumorphView">
+        <item name="neumorph_shapeType">flat</item>
+        <item name="neumorph_shapeAppearance">@style/NeumorphShape.Rounded</item>
+    </style>
+
+    <style name="defaultNeumorphFloatingActionButton" parent="NeumorphView">
+        <item name="neumorph_shapeAppearance">@style/NeumorphShape.Oval</item>
+    </style>
+
+    <style name="defaultNeumorphTextView" parent="NeumorphView">
+        <item name="neumorph_shadowElevation">2dp</item>
+    </style>
+
+    <style name="NeumorphShape" />
+
+    <style name="NeumorphShape.Rounded">
+        <item name="neumorph_cornerFamily">rounded</item>
+        <item name="neumorph_cornerSize">36dp</item>
+    </style>
+
+    <style name="NeumorphShape.Oval">
+        <item name="neumorph_cornerFamily">oval</item>
+    </style>
+
 </resources>

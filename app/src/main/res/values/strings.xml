@@ -14,5 +14,8 @@
     <string name="details_text_description">Description</string>
     <string name="details_content_image_banner">content image banner</string>
     <string name="menu_search_text">Search</string>
+    <string name="image_caption_text">Image Caption Text</string>
+    <string name="extra_place_image_desc">extra_place_image</string>
+    <string name="caption_string">Caption</string>
 </resources>
 

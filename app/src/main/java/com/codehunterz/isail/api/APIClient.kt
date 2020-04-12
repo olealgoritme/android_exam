@@ -6,6 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object APIClient {
     private const val BASE_URL = "https://www.noforeignland.com/home/api/v1/"
+
     private var retrofit: Retrofit? = null
     val getIt: Retrofit?
         get() {
